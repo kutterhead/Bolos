@@ -31,7 +31,7 @@ public class gameController : MonoBehaviour
     }
     public void dispara()
     {
-        bola.GetComponent<Rigidbody>().velocity = puntero.forward * 10;
+        bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 10;
 
     }
 
@@ -44,16 +44,16 @@ public class gameController : MonoBehaviour
         {
             if (bolosObjects[i].transform.eulerAngles.x>10f || bolosObjects[i].transform.eulerAngles.z > 10f)
             {
-                checkBolos[i] = true;//si ha caído
+                checkBolos[i] = true;//si ha caï¿½do
                 caidos++;
             }
             else
             {
-                checkBolos[i] = false;//no ha caído
+                checkBolos[i] = false;//no ha caï¿½do
             }
-            //Debug.Log("bolo caído " + i + ": " + checkBolos[i]);
+            //Debug.Log("bolo caï¿½do " + i + ": " + checkBolos[i]);
         }
-        Debug.Log("Han caído " + caidos + " bolos.");
+        Debug.Log("Han caï¿½do " + caidos + " bolos.");
         Debug.Log("En pie " + (bolosObjects.Length - caidos) + " bolos.");
     }
 

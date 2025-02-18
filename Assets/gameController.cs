@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class gameController : MonoBehaviour
 {
@@ -24,6 +25,12 @@ public class gameController : MonoBehaviour
 
     public Vector3[] posiciones;
 
+
+    [SerializeField]
+    int action = 0;
+
+    public Scrollbar barraPotencia;
+    public Scrollbar barraDireccion;
     void Start()
     {
         // bola.GetComponent<Rigidbody>().AddForce(puntero.forward*10,ForceMode.Impulse);
@@ -42,7 +49,7 @@ public class gameController : MonoBehaviour
 
         }
 
-
+       
     }
 
     public void resetBolos()
@@ -68,7 +75,7 @@ public class gameController : MonoBehaviour
     {
 
         bola.transform.position = puntero.position;
-        bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 20;
+        bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 30 * barraPotencia.size;
 
     }
 
@@ -116,10 +123,64 @@ public class gameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Invoke("dispara", 1f);
+            action++;
+            if (action==1)
+            {
+                StartCoroutine("mueveBarraPotencia");
+            }
 
-            dispara();
-            Invoke("compruebaBolos", 5f);
+            if (action > 2)
+            {
+
+                action = 0;
+            }
+           
 
         }
     }
+
+    IEnumerator mueveBarraPotencia()
+    {
+        float tiempo = 0;
+        //float tiempo2 = 0;
+        while (true)
+        {
+
+
+            /*       
+               tiempo += Time.deltaTime;
+
+               barraPotencia.value = (Mathf.Sin(tiempo * 2)+1)/2;
+            */
+
+            tiempo += Time.deltaTime;
+
+            if (tiempo < 1)
+            {
+                barraPotencia.size = tiempo;
+
+            }
+            else
+            {
+                barraPotencia.size = 2 - tiempo;
+                if (tiempo >= 2)
+                {
+
+                    tiempo = 0;
+                }
+
+            }
+
+            if (action==2)
+            {
+                dispara();
+                Invoke("compruebaBolos", 5f);
+                break;
+            }
+
+            yield return null;
+        }
+    }
+
+
 }

@@ -8,6 +8,9 @@ public class gameController : MonoBehaviour
     // Start is called before the first frame update
 
     public GameObject bola;
+    public GameObject bolaFake;
+
+
     public Transform puntero;
 
     public GameObject[] bolosObjects;
@@ -31,7 +34,8 @@ public class gameController : MonoBehaviour
     {
         // bola.GetComponent<Rigidbody>().AddForce(puntero.forward*10,ForceMode.Impulse);
         //bola.GetComponent<Rigidbody>().AddForce(puntero.forward * 10, ForceMode.VelocityChange);
-
+        bola.SetActive(false);
+        bolaFake.SetActive(true);
         caidos = 0;
         puntos = 0;
 
@@ -71,12 +75,18 @@ public class gameController : MonoBehaviour
     {
 
 
-        bola.transform.position = puntero.position + new Vector3(sliderPosicion.value,0,0) ;
 
-        puntero.eulerAngles = new Vector3(0, 10 * sliderAngulo.value, 0);
+
+        bola.SetActive(true);
+        bolaFake.SetActive(false);
+
+        bola.transform.position = puntero.position + new Vector3(sliderPosicion.value, 0, 0);
         bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 30 * barraPotencia.size;
 
     }
+
+
+
 
 
     public void compruebaBolos(){
@@ -225,6 +235,10 @@ public class gameController : MonoBehaviour
                 break;
             }
 
+            puntero.position = new Vector3(sliderPosicion.value, puntero.position.y, puntero.position.z);
+            //bola.transform.position = puntero.position + new Vector3(sliderPosicion.value, 0, 0);
+            //puntero.position = bola.transform.position;
+
             yield return null;
         }
     }
@@ -267,6 +281,8 @@ public class gameController : MonoBehaviour
                 break;
             }
 
+
+            puntero.eulerAngles = new Vector3(0, 10 * sliderAngulo.value, 0);
             yield return null;
         }
     }

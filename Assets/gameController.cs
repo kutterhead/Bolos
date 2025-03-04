@@ -10,27 +10,23 @@ public class gameController : MonoBehaviour
     public GameObject bola;
     public Transform puntero;
 
-
     public GameObject[] bolosObjects;
-
     bool[] checkBolos = new bool[] { false, false, false, false, false, false, false, false, false, false };
-
-
     public int caidos = 0;
-
-    
+  
     int puntos = 0;
     int ronda = 0;
 
-
     public Vector3[] posiciones;
-
 
     [SerializeField]
     int action = 0;
 
     public Scrollbar barraPotencia;
-    public Scrollbar barraDireccion;
+    //public Scrollbar barraPosicion;
+    //public Scrollbar barraDireccion;
+    public Slider sliderPosicion;
+    public Slider sliderAngulo;
     void Start()
     {
         // bola.GetComponent<Rigidbody>().AddForce(puntero.forward*10,ForceMode.Impulse);
@@ -74,7 +70,10 @@ public class gameController : MonoBehaviour
     public void dispara()
     {
 
-        bola.transform.position = puntero.position;
+
+        bola.transform.position = puntero.position + new Vector3(sliderPosicion.value,0,0) ;
+
+        puntero.eulerAngles = new Vector3(0, 10 * sliderAngulo.value, 0);
         bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 30 * barraPotencia.size;
 
     }
@@ -114,7 +113,6 @@ public class gameController : MonoBehaviour
         }
 
         Invoke("resetBolos",1f);
-
     }
 
     // Update is called once per frame
@@ -128,14 +126,21 @@ public class gameController : MonoBehaviour
             {
                 StartCoroutine("mueveBarraPotencia");
             }
-
-            if (action > 2)
+            else if(action ==2)
             {
+                StartCoroutine("mueveBarraPosicion");
+               
+            }else if (action == 3)
+            {
+                
+               StartCoroutine("mueveBarraAngulo");
+            }
 
+            /*if (action > 3)
+            {
                 action = 0;
             }
-           
-
+           */
         }
     }
 
@@ -171,7 +176,91 @@ public class gameController : MonoBehaviour
 
             }
 
-            if (action==2)
+            if (action!=1)
+            {
+                //ispara();
+                //Invoke("compruebaBolos", 5f);
+                break;
+            }
+
+            yield return null;
+        }
+    }
+    IEnumerator mueveBarraPosicion()
+    {
+        float tiempo = 0;
+        //float tiempo2 = 0;
+        while (true)
+        {
+
+
+            /*       
+               tiempo += Time.deltaTime;
+
+               barraPotencia.value = (Mathf.Sin(tiempo * 2)+1)/2;
+            */
+
+            tiempo += Time.deltaTime;
+
+            if (tiempo < 1)
+            {
+                sliderPosicion.value = (tiempo * 2) - 1;
+
+            }
+            else
+            {
+                sliderPosicion.value = 2 - ((tiempo * 2) -1);
+                if (tiempo >= 2)
+                {
+
+                    tiempo = 0;
+                }
+
+            }
+
+            if (action != 2)
+            {
+                //dispara();
+                //Invoke("compruebaBolos", 5f);
+                break;
+            }
+
+            yield return null;
+        }
+    }
+    IEnumerator mueveBarraAngulo()
+    {
+        float tiempo = 0;
+        //float tiempo2 = 0;
+        while (true)
+        {
+
+
+            /*       
+               tiempo += Time.deltaTime;
+
+               barraPotencia.value = (Mathf.Sin(tiempo * 2)+1)/2;
+            */
+
+            tiempo += Time.deltaTime * 2;
+
+            if (tiempo < 1)
+            {
+                sliderAngulo.value = (tiempo * 2) - 1;
+
+            }
+            else
+            {
+                sliderAngulo.value = 2 - ((tiempo * 2) - 1);
+                if (tiempo >= 2)
+                {
+
+                    tiempo = 0;
+                }
+
+            }
+
+            if (action != 3)
             {
                 dispara();
                 Invoke("compruebaBolos", 5f);
@@ -181,6 +270,5 @@ public class gameController : MonoBehaviour
             yield return null;
         }
     }
-
 
 }

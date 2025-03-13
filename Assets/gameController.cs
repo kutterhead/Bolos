@@ -10,12 +10,14 @@ public class gameController : MonoBehaviour
 
     public GameObject bola;
     public GameObject bolaFake;
+    public Transform puntoInicio;
 
 
     public Transform puntero;
 
     public GameObject[] bolosObjects;
     bool[] checkBolos = new bool[] { false, false, false, false, false, false, false, false, false, false };
+    public bool[] checkBolosEspeciales = new bool[] { false, false, false, false, false, false, false, false, false, false };
     public int caidos = 0;
   
     int puntos = 0;
@@ -39,6 +41,9 @@ public class gameController : MonoBehaviour
     public TMPro.TextMeshProUGUI infoTmPro;
 
     public Material boloEspecialMaterial;
+
+    bool bolosDetenidos = false;
+
     void Start()
     {
         puntuacionGeneral = 0;
@@ -59,25 +64,90 @@ public class gameController : MonoBehaviour
 
         }
 
-        bolosObjects[0].GetComponentInChildren<MeshRenderer>().material = boloEspecialMaterial;
+
+        escogeRojos();
+
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //Invoke("dispara", 1f);
+            action++;
+            if (action == 1)
+            {
+                StartCoroutine("mueveBarraPosicion");
+            }
+            else if (action == 2)
+            {
+                StartCoroutine("mueveBarraAngulo");
+
+            }
+            else if (action == 3)
+            {
+
+                StartCoroutine("mueveBarraPotencia");
+            }
+            else if (action == 4)
+            {
+                dispara();
+                StartCoroutine("comprobarVelocidadBolos");
+            }
+            else if(bolosDetenidos)
+            {
+                resetBolos();
+                action = 0;
+            }
+
+            /*if (action > 3)
+            {
+                action = 0;
+            }
+           */
+        }
+    }
     public void resetBolos()
     {
+        
         for (int i = 0; i < bolosObjects.Length; i++)
         {
             bolosObjects[i].transform.position = posiciones[i];
             bolosObjects[i].transform.eulerAngles = Vector3.zero;
 
             //bolosObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-            //bolosObjects[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-            //bolosObjects[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            bolosObjects[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+            bolosObjects[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         }
         Debug.Log("Resetea bolos");
+
+        bola.SetActive(false);
+        bolaFake.SetActive(true);
+        puntero.transform.position = puntoInicio.position;
+        puntero.transform.rotation = puntoInicio.rotation;
     }
 
+    void escogeRojos()
+    {
+        int contadorEspeciales = 0;
+        for (int i = 0; i < bolosObjects.Length; i++)
+        {
+            if (bolosObjects.Length / 2 <= Random.Range(0, bolosObjects.Length))
+            {
+                contadorEspeciales++;
+                if (contadorEspeciales > 5)
+                {
+                    break;
+                }
 
+
+                checkBolosEspeciales[i] = true;
+                bolosObjects[i].GetComponentInChildren<MeshRenderer>().material = boloEspecialMaterial;
+            }
+
+        }
+    }
 
 
     public void dispara()
@@ -87,9 +157,42 @@ public class gameController : MonoBehaviour
         bolaFake.SetActive(false);
         bola.transform.position = puntero.position + new Vector3(sliderPosicion.value, 0, 0);
         bola.GetComponent<Rigidbody>().linearVelocity = puntero.forward * 30 * barraPotencia.size;
+        
+        
+        //corrutina para comprobacion
         Invoke("compruebaBolos", 10f);
     }
 
+    IEnumerator comprobarVelocidadBolos()
+    {
+        bolosDetenidos = false;
+        int numBolosDetenidos = 0;               
+        while (true)
+        {
+            for (int i = 0; i < bolosObjects.Length; i++)
+            {
+                if (Mathf.Abs(bolosObjects[i].GetComponent<Rigidbody>().angularVelocity.y) < 0.0001f)
+                {
+                    numBolosDetenidos++;
+                    bolosDetenidos = true;
+                    
+                }
+                
+               // bolosObjects[i].transform.eulerAngles = Vector3.zero;
+                //bolosObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                //bolosObjects[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                //bolosObjects[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+            }
+            if (numBolosDetenidos == bolosObjects.Length)
+            {
+                break;
+            }
+            yield return null;
+
+        }
+
+    }
 
 
 
@@ -104,7 +207,19 @@ public class gameController : MonoBehaviour
             {
                 checkBolos[i] = true;//si ha ca�do
                 caidos++;
-                puntos++;
+
+                if (checkBolosEspeciales[i]==false)
+                {
+
+                    puntos += 5;
+                    Debug.Log("Has derribado bolo especial");
+                }
+                else
+                {
+                    puntos++;
+
+                }
+
             }
             else
             {
@@ -147,42 +262,8 @@ public class gameController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //Invoke("dispara", 1f);
-            action++;
-            if (action==1)
-            {
-                StartCoroutine("mueveBarraPosicion");
-            }
-            else if(action ==2)
-            {
-               StartCoroutine("mueveBarraAngulo");
-               
-            }else if (action == 3)
-            {
-                
-                StartCoroutine("mueveBarraPotencia");
-            }
-            else if (action == 4)
-            {
-                dispara();
-            }
-            else
-            {
-                resetBolos();
-                action = 0;
-            }
 
-            /*if (action > 3)
-            {
-                action = 0;
-            }
-           */
-        }
-    }
+
 
     IEnumerator mueveBarraPotencia()
     {
@@ -286,7 +367,7 @@ public class gameController : MonoBehaviour
                barraPotencia.value = (Mathf.Sin(tiempo * 2)+1)/2;
             */
 
-            tiempo += Time.deltaTime * 2;
+            tiempo += Time.deltaTime;
 
             if (tiempo < 1)
             {

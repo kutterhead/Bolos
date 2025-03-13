@@ -675,8 +675,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bola: {fileID: 697518249}
   bolaFake: {fileID: 768037502}
+  puntoInicio: {fileID: 1917137783}
   puntero: {fileID: 1419172940}
   bolosObjects: []
+  checkBolosEspeciales: 00000000000000000000
   caidos: 0
   posiciones:
   - {x: 0, y: 0, z: 0}
@@ -1968,14 +1970,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2006,7 +2008,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -9.25, y: 0, z: 0, w: -327.35938}
+  m_margin: {x: -152.06055, y: 0, z: 0, w: -327.35938}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2372,7 +2374,7 @@ Transform:
   m_GameObject: {fileID: 1419172939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.258, z: -21.46}
+  m_LocalPosition: {x: 0, y: 1.258, z: -21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2809,6 +2811,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5abf4ef824d7e78468c81c0f976fd482, type: 3}
+--- !u!1 &1917137782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1917137783}
+  m_Layer: 0
+  m_Name: inicio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1917137783
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917137782}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.258, z: -21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1957253296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2975,6 +3008,7 @@ SceneRoots:
   - {fileID: 1886601107}
   - {fileID: 697518254}
   - {fileID: 462773982}
+  - {fileID: 1917137783}
   - {fileID: 1419172940}
   - {fileID: 1957253296}
   - {fileID: 128521790}

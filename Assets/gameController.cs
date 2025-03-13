@@ -163,52 +163,20 @@ public class gameController : MonoBehaviour
         Invoke("compruebaBolos", 10f);
     }
 
-    IEnumerator comprobarVelocidadBolos()
+
+    public void compruebaBolos()
     {
-        bolosDetenidos = false;
-        int numBolosDetenidos = 0;               
-        while (true)
-        {
-            for (int i = 0; i < bolosObjects.Length; i++)
-            {
-                if (Mathf.Abs(bolosObjects[i].GetComponent<Rigidbody>().angularVelocity.y) < 0.0001f)
-                {
-                    numBolosDetenidos++;
-                    bolosDetenidos = true;
-                    
-                }
-                
-               // bolosObjects[i].transform.eulerAngles = Vector3.zero;
-                //bolosObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                //bolosObjects[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-                //bolosObjects[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-            }
-            if (numBolosDetenidos == bolosObjects.Length)
-            {
-                break;
-            }
-            yield return null;
-
-        }
-
-    }
-
-
-
-
-    public void compruebaBolos(){
 
         Debug.Log("Comprobando bolos");
         caidos = 0;
-        for (int i = 0; i < bolosObjects.Length;i++)
+        for (int i = 0; i < bolosObjects.Length; i++)
         {
-            if (bolosObjects[i].transform.eulerAngles.x>10f || bolosObjects[i].transform.eulerAngles.z > 10f)
+            if (bolosObjects[i].transform.eulerAngles.x > 10f || bolosObjects[i].transform.eulerAngles.z > 10f)
             {
                 checkBolos[i] = true;//si ha ca�do
                 caidos++;
 
-                if (checkBolosEspeciales[i]==false)
+                if (checkBolosEspeciales[i] == false)
                 {
 
                     puntos += 5;
@@ -252,7 +220,7 @@ public class gameController : MonoBehaviour
         puntuacionGeneral += puntos;
         infoTmPro.text += "\nTotal: " + puntuacionGeneral + ".";
         ronda++;
-        if (ronda>3)
+        if (ronda > 3)
         {
 
             Debug.Log("gameOver");
@@ -261,10 +229,38 @@ public class gameController : MonoBehaviour
         //Invoke("resetBolos",1f);
     }
 
-    // Update is called once per frame
 
+    #region corrutinas
+    IEnumerator comprobarVelocidadBolos()
+    {
+        bolosDetenidos = false;
+        int numBolosDetenidos = 0;               
+        while (true)
+        {
+            for (int i = 0; i < bolosObjects.Length; i++)
+            {
+                if (Mathf.Abs(bolosObjects[i].GetComponent<Rigidbody>().angularVelocity.y) < 0.0001f)
+                {
+                    numBolosDetenidos++;
+                    bolosDetenidos = true;
+                    
+                }
+                
+               // bolosObjects[i].transform.eulerAngles = Vector3.zero;
+                //bolosObjects[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                //bolosObjects[i].GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                //bolosObjects[i].GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
+            }
+            if (numBolosDetenidos == bolosObjects.Length)
+            {
+                break;
+            }
+            yield return null;
 
+        }
+
+    }
     IEnumerator mueveBarraPotencia()
     {
         float tiempo = 0;
@@ -397,5 +393,5 @@ public class gameController : MonoBehaviour
             yield return null;
         }
     }
-
+    #endregion
 }
